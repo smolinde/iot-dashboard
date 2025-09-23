@@ -8,7 +8,7 @@ assignees: smolinde
 ---
 
 **Please Confirm**  
-I browsed the [stationicons]() folder and was not able to find the station brand I am looking for.
+I browsed the [stationicons](https://github.com/smolinde/iot-dashboard/tree/master/stationicons) folder and was not able to find the station brand I am looking for.
 - [ ] yes
 - [X] no
 
