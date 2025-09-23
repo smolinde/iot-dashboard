@@ -1,0 +1,31 @@
+{    
+    "wlan_ssid" : "Your-WiFi-Name",
+    "wlan_psk" : "Your-WiFi-Password",
+    "tankerkoenig_api_key" : "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "station_ids" : [
+        "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+        "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+        "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    ],
+    "station_labels" : [
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ]
+    ],
+    "fuel_type" : "e5",
+    "weather_lat" : 51.163375,
+    "weather_long" : 10.447683,
+    "automatic_updates" : true
+}
