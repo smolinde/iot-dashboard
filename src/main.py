@@ -13,6 +13,12 @@ from updater import UpdateManager
 WLAN_TIMEOUT = 30
 REQUEST_TIMEOUT = 5
 UPDATE_HOUR = 3
+LOOP_DELAY = 0.2
+
+T_DAY = 2
+T_HOUR = 3
+T_MINUTE = 4
+T_SECOND = 5
 
 socket.socket().settimeout(REQUEST_TIMEOUT)
 fmgr = FileManager()
@@ -33,6 +39,19 @@ def exit_if_process_fails(error_code, error_text, display_manager, file_manager,
             while not touch_manager.is_touched():
                 pass
         
+        machine.reset()
+
+def update_firmware(display_manager, update_manager, file_manager, wlan_manager):
+    current_version, update_version = update_manager.update_available()
+    if current_version != update_version:
+        display_manager.draw_update_screen(file_manager.get_image_file("symbol", "update"), current_version, update_version)
+        display_manager.draw_update_action("Downloading update...")
+        exit_if_process_fails(*update_manager.download_update(), display_manager, file_manager, wlan_manager)
+        display_manager.draw_update_action("Verifying update...")
+        exit_if_process_fails(*update_manager.verify_update(), display_manager, file_manager, wlan_manager)
+        display_manager.draw_update_action("Installing update...")
+        os.rename("main.py", "main_OLD.py")
+        os.rename("updater.py", "main.py")
         machine.reset()
 
 def main():
@@ -81,25 +100,32 @@ def main():
    
     while True:
         t = tmgr.get_timestamp()
-        if previous_hour != t[3]:
-            previous_hour = t[3]
+        if previous_day != t[T_DAY]:
+            previous_day = t[T_DAY]
+            perform_update_check = True
+
+        if previous_hour != t[T_HOUR]:
+            previous_hour = t[T_HOUR]
             exit_if_process_fails(*wlnm.device_online(), dspm, fmgr, wlnm)
             exit_if_process_fails(*tmgr.sync_time(), dspm, fmgr, wlnm)
 
-        if previous_minute != t[4]:
-            previous_minute = t[4]
+        if previous_minute != t[T_MINUTE]:
+            previous_minute = t[T_MINUTE]
             dspm.draw_weekday_date_time(tmgr.get_timedate())
 
-        if previous_day != t[2]:
-            previous_day = t[2]
-            perform_update_check = True
-
-        if (t[4] - 1) % 5 != 0 and not data_can_be_updated:
+        if (t[T_MINUTE] - 1) % 5 != 0 and not data_can_be_updated:
             data_can_be_updated = True
 
-        if (data_can_be_updated and t[5] >= 1 and (t[4] - 1) % 5 == 0):
+        if (data_can_be_updated and t[T_SECOND] >= 1 and (t[T_MINUTE] - 1) % 5 == 0):
             data_can_be_updated = False
             exit_if_process_fails(*wlnm.device_online(), dspm, fmgr, wlnm)
+            if not tmgr.get_timezone_set():
+                tmgr.set_timezone()
+
+            if (fmgr.get_configuration_value("automatic_updates") and perform_update_check and t[T_HOUR] == UPDATE_HOUR):
+                perform_update_check = False
+                update_firmware(dspm, upmr, fmgr, wlnm)
+            
             weather_data, weather_icon_name = wmgr.get_weather_data(t, tmgr.get_tz_identifier())
             if(dspm.currently_displayed.get("weather_icon_name") != weather_icon_name):
                 dspm.draw_weather_data(weather_data, weather_icon_name, fmgr.get_image_file("weather", weather_icon_name))
@@ -107,24 +133,8 @@ def main():
                 dspm.draw_weather_data(weather_data, weather_icon_name)
             
             dspm.draw_station_data(*stmr.get_station_data())
-            if not tmgr.get_timezone_set():
-                tmgr.set_timezone()
             
-            if (fmgr.get_configuration_value("automatic_updates") and perform_update_check and t[3] == UPDATE_HOUR):
-                perform_update_check = False
-                current_version, update_version = upmr.update_available()
-                if current_version != update_version:
-                    dspm.draw_update_screen(fmgr.get_image_file("symbol", "update"), current_version, update_version)
-                    dspm.draw_update_action("Downloading update...")
-                    exit_if_process_fails(*upmr.download_update(), dspm, fmgr, wlnm)
-                    dspm.draw_update_action("Verifying update...")
-                    exit_if_process_fails(*upmr.verify_update(), dspm, fmgr, wlnm)
-                    dspm.draw_update_action("Installing update...")
-                    os.rename("main.py", "main_OLD.py")
-                    os.rename("updater.py", "main.py")
-                    machine.reset()
-
-        time.sleep(0.2)
+        time.sleep(LOOP_DELAY)
 
 if __name__ == "__main__":
     try:
