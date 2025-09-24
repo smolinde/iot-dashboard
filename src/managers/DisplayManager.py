@@ -98,7 +98,7 @@ class DisplayManager:
             self.display.image(8, 88 + 80 * i, 64, 64, station_icons[i])
             self.display.fill_rect(332, 82 + 80 * i, 148, 78, RGB(140, 240, 140))
             if station_labels[i][1] == "":
-                self.display.text(90, 89 + 80 * i, self.__STATION_DEFAULT_TEXT_LABELS(i), ILI9488.BLACK, 1, ILI9488.WHITE)
+                self.display.text(90, 89 + 80 * i, self.__STATION_DEFAULT_TEXT_LABELS[i], ILI9488.BLACK, 1, ILI9488.WHITE)
             else:
                 self.display.text(90, 89 + 80 * i,  station_labels[i][1][:21], ILI9488.BLACK, 1, ILI9488.WHITE)
             if station_labels[i][2] == "":
