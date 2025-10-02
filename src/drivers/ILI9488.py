@@ -1,40 +1,50 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
-ILI9488 MicroPython driver
+ILI9488 MicroPython Driver
+Created by Denis Smolin in 2025
+
+This driver provides an interface for controlling the ILI9488 TFT LCD display
+using MicroPython on an ESP32 or similar microcontroller. It supports basic
+graphics operations like drawing pixels, lines, rectangles, and text, as well
+as displaying images.
 """
 
 import time, machine
 
-# Commands
-TFT_NOP = 0x00
-TFT_SWRST = 0x01
-TFT_SLPIN = 0x10
-TFT_SLPOUT = 0x11
-TFT_INVOFF = 0x20
-TFT_INVON = 0x21
-TFT_DISPOFF = 0x28
-TFT_DISPON = 0x29
-TFT_CASET = 0x2A
-TFT_PASET = 0x2B
-TFT_RAMWR = 0x2C
-TFT_RAMRD = 0x2E
-TFT_MADCTL = 0x36
+# ILI9488 Display Controller Commands
+TFT_NOP = 0x00      # No Operation
+TFT_SWRST = 0x01    # Software Reset
+TFT_SLPIN = 0x10    # Enter Sleep Mode
+TFT_SLPOUT = 0x11   # Exit Sleep Mode
+TFT_INVOFF = 0x20   # Display Inversion Off
+TFT_INVON = 0x21    # Display Inversion On
+TFT_DISPOFF = 0x28  # Display Off
+TFT_DISPON = 0x29   # Display On
+TFT_CASET = 0x2A    # Column Address Set
+TFT_PASET = 0x2B    # Page Address Set
+TFT_RAMWR = 0x2C    # Memory Write
+TFT_RAMRD = 0x2E    # Memory Read
+TFT_MADCTL = 0x36   # Memory Access Control
 
 def RGB(r, g, b):
-    """Return RGB color value.
+    """Converts individual R, G, B color components into a tuple.
 
     Args:
-        r (int): Red value.
-        g (int): Green value.
-        b (int): Blue value.
+        r (int): Red component (0-255).
+        g (int): Green component (0-255).
+        b (int): Blue component (0-255).
+
+    Returns:
+        tuple: A tuple (r, g, b) representing the RGB color.
     """
     return r, g, b
 
 class ILI9488:
-    """ILI9488 driver class"""
-    # Predefined RGB color constants
+    """Driver for the ILI9488 TFT LCD display controller.
+
+    Provides methods for display initialization, basic drawing primitives,
+    text rendering, and image display.
+    """
+    # Predefined RGB color constants for convenience
     BLACK   = RGB(0, 0, 0)
     WHITE   = RGB(255, 255, 255)
     RED     = RGB(255, 0, 0)
@@ -48,16 +58,27 @@ class ILI9488:
     PURPLE  = RGB(128, 0, 128)
 
     def __init__(self, spi, cs, dc, rst, rotation=0, font = None):
-        """Init display"""
+        """
+        Initializes the ILI9488 display driver.
+
+        Args:
+            spi (machine.SPI): Configured SPI bus object.
+            cs (machine.Pin): Chip Select pin object.
+            dc (machine.Pin): Data/Command pin object.
+            rst (machine.Pin): Reset pin object.
+            rotation (int, optional): Initial screen rotation in degrees (0, 90, 180, 270). Defaults to 0.
+            font (XglcdFont, optional): Default font object to use for text rendering. Defaults to None.
+        """
         self.spi = spi
         self.cs = cs
         self.dc = dc
         self.rst = rst
-        self.width = 480
-        self.height = 320
+        self.width = 480  # Default width for 0/180 rotation
+        self.height = 320 # Default height for 0/180 rotation
         self.rotation = rotation
         self.font = font
 
+        # Configure control pins as outputs and set initial states
         self.cs.init(self.cs.OUT, value=1)
         self.dc.init(self.dc.OUT, value=1)
         self.rst.init(self.rst.OUT, value=1)
@@ -67,30 +88,31 @@ class ILI9488:
         self.rotate(rotation)
 
     def rotate(self, rotation):
-        """Set display rotation.
+        """Sets the display rotation.
         
         Args:
-            rotation (int): Screen orientation (0, 90, 180, 270 degrees)
+            rotation (int): Screen orientation in degrees (0, 90, 180, 270).
         """
         rotation = rotation % 360  # Normalize to 0-359 degrees
         self.rotation = rotation
-        madctl = 0x28  # MX=1, MV=0, MY=0
+        madctl = 0x28  # Default: MX=1 (row address order), MV=0 (column address order), MY=0 (page address order)
         
-        # Map rotation to MADCTL values (BGR bit always set)
+        # Adjust MADCTL register based on desired rotation
+        # The BGR bit (bit 3, 0x08) is typically set for ILI9488 to ensure correct color order.
         if rotation == 0:
-            madctl = 0x28
+            madctl = 0x28  # Portrait (MX=1, MY=0, MV=0, BGR=1)
             self.width = 480
             self.height = 320
         elif rotation == 90:
-            madctl = 0x48
+            madctl = 0x48  # Landscape (MX=0, MY=1, MV=1, BGR=1)
             self.width = 320
             self.height = 480
         elif rotation == 180:
-            madctl = 0xE8
+            madctl = 0xE8  # Portrait inverted (MX=1, MY=1, MV=0, BGR=1)
             self.width = 480
             self.height = 320
         elif rotation == 270:
-            madctl = 0x88
+            madctl = 0x88  # Landscape inverted (MX=0, MY=0, MV=1, BGR=1)
             self.width = 320
             self.height = 480
         else:
@@ -101,32 +123,43 @@ class ILI9488:
         self.write_data(madctl)
 
     def reset(self):
-        """Reset display"""
-        self.rst.value(0)
+        """Performs a hardware reset of the display controller."""
+        self.rst.value(0) # Pull RST low
         time.sleep_ms(50)
-        self.rst.value(1)
+        self.rst.value(1) # Pull RST high
         time.sleep_ms(50)
 
     def write_cmd(self, cmd):
-        """Write command"""
-        self.cs.value(0)
-        self.dc.value(0)
+        """Writes a command byte to the display controller.
+
+        Args:
+            cmd (int): The command byte to send.
+        """
+        self.cs.value(0) # Assert Chip Select
+        self.dc.value(0) # Set Data/Command to Command mode
         self.spi.write(bytearray([cmd]))
-        self.cs.value(1)
+        self.cs.value(1) # De-assert Chip Select
 
     def write_data(self, data):
-        """Write data"""
-        self.cs.value(0)
-        self.dc.value(1)
+        """Writes data bytes to the display controller.
+
+        Args:
+            data (int or bytes): The data to send. Can be a single byte (int) or a bytearray/bytes object.
+        """
+        self.cs.value(0) # Assert Chip Select
+        self.dc.value(1) # Set Data/Command to Data mode
         if isinstance(data, int):
             self.spi.write(bytearray([data]))
         else:
             self.spi.write(data)
-        self.cs.value(1)
+        self.cs.value(1) # De-assert Chip Select
 
     def init_display(self):
-        """Initialize display"""
-        self.write_cmd(0xE0) # Positive Gamma Control
+        """Initializes the ILI9488 display with a sequence of commands and data.
+        This sequence configures gamma, power, VCOM, pixel format, frame rate, and other display parameters.
+        """
+        # Positive Gamma Control
+        self.write_cmd(0xE0)
         self.write_data(0x00)
         self.write_data(0x03)
         self.write_data(0x09)
@@ -143,7 +176,8 @@ class ILI9488:
         self.write_data(0x1A)
         self.write_data(0x0F)
 
-        self.write_cmd(0XE1) # Negative Gamma Control
+        # Negative Gamma Control
+        self.write_cmd(0XE1)
         self.write_data(0x00)
         self.write_data(0x16)
         self.write_data(0x19)
@@ -160,75 +194,95 @@ class ILI9488:
         self.write_data(0x37)
         self.write_data(0x0F)
 
-        self.write_cmd(0XC0) # Power Control 1
+        # Power Control 1
+        self.write_cmd(0XC0)
         self.write_data(0x17)
         self.write_data(0x15)
 
-        self.write_cmd(0xC1) # Power Control 2
+        # Power Control 2
+        self.write_cmd(0xC1)
         self.write_data(0x41)
 
-        self.write_cmd(0xC5) # VCOM Control
+        # VCOM Control
+        self.write_cmd(0xC5)
         self.write_data(0x00)
         self.write_data(0x12)
         self.write_data(0x80)
 
-        self.write_cmd(0x3A) # Pixel Interface Format
-        self.write_data(0x66) # 18-bit colour for SPI
+        # Pixel Interface Format
+        self.write_cmd(0x3A)
+        self.write_data(0x66) # 18-bit colour for SPI (RGB666)
 
-        self.write_cmd(0xB0) # Interface Mode Control
+        # Interface Mode Control
+        self.write_cmd(0xB0)
         self.write_data(0x00)
 
-        self.write_cmd(0xB1) # Frame Rate Control
+        # Frame Rate Control
+        self.write_cmd(0xB1)
         self.write_data(0xA0)
 
-        self.write_cmd(0xB4) # Display Inversion Control
+        # Display Inversion Control
+        self.write_cmd(0xB4)
         self.write_data(0x02)
 
-        self.write_cmd(0xB6) # Display Function Control
+        # Display Function Control
+        self.write_cmd(0xB6)
         self.write_data(0x02)
         self.write_data(0x02)
         self.write_data(0x3B)
 
-        self.write_cmd(0xB7) # Entry Mode Set
+        # Entry Mode Set
+        self.write_cmd(0xB7)
         self.write_data(0xC6)
 
-        self.write_cmd(0xF7) # Adjust Control 3
+        # Adjust Control 3
+        self.write_cmd(0xF7)
         self.write_data(0xA9)
         self.write_data(0x51)
         self.write_data(0x2C)
         self.write_data(0x82)
 
-        self.write_cmd(TFT_SLPOUT) #Exit Sleep
+        # Exit Sleep Mode
+        self.write_cmd(TFT_SLPOUT)
         time.sleep_ms(120)
 
-        self.write_cmd(TFT_DISPON) #Display on
+        # Turn Display On
+        self.write_cmd(TFT_DISPON)
         time.sleep_ms(25)
 
     def fill_screen(self, color):
-        """Fill screen with color"""
+        """Fills the entire display with a single color.
+
+        Args:
+            color (tuple): RGB color (r, g, b) to fill the screen with.
+        """
         self.set_window(0, 0, self.width - 1, self.height - 1)
         r, g, b = color
+        # Create a buffer for one row of pixels
         buf = bytearray(3 * self.width)
         for i in range(self.width):
             buf[3 * i] = r
             buf[3 * i + 1] = g
             buf[3 * i + 2] = b
+        # Write the buffer for each row to fill the screen
         for i in range(self.height):
             self.write_data(buf)
 
     def fill_rect(self, x, y, width, height, color):
-        """Draw a filled rectangle.
+        """Draws a filled rectangle on the display.
         
         Args:
-            x, y (int): Top-left corner coordinates
-            width, height (int): Dimensions of rectangle
-            color (tuple): RGB color (r, g, b)
+            x (int): X-coordinate of the top-left corner.
+            y (int): Y-coordinate of the top-left corner.
+            width (int): Width of the rectangle.
+            height (int): Height of the rectangle.
+            color (tuple): RGB color (r, g, b) to fill the rectangle with.
         """
-        # Validate coordinates
+        # Validate coordinates to ensure they are within display bounds
         if x >= self.width or y >= self.height:
             return
             
-        # Clamp to display boundaries
+        # Clamp rectangle dimensions to display boundaries
         x_end = min(x + width - 1, self.width - 1)
         y_end = min(y + height - 1, self.height - 1)
         
@@ -236,25 +290,32 @@ class ILI9488:
         actual_width = x_end - x + 1
         actual_height = y_end - y + 1
         
-        # Set drawing window
+        # Set the drawing window to the rectangle area
         self.set_window(x, y, x_end, y_end)
         
-        # Prepare color data
+        # Prepare color data for one row of the rectangle
         r, g, b = color
         buf = bytearray(3 * actual_width)
         
-        # Fill buffer with color
+        # Fill buffer with the specified color
         for i in range(actual_width):
             buf[3 * i] = r
             buf[3 * i + 1] = g
             buf[3 * i + 2] = b
         
-        # Write rows
+        # Write the color buffer for each row to draw the filled rectangle
         for _ in range(actual_height):
             self.write_data(buf)
 
     def set_window(self, x0, y0, x1, y1):
-        """Set window for drawing"""
+        """Sets the active window (drawing area) on the display.
+
+        Args:
+            x0 (int): Start column address.
+            y0 (int): Start page (row) address.
+            x1 (int): End column address.
+            y1 (int): End page (row) address.
+        """
         self.write_cmd(TFT_CASET) # Column address set
         self.write_data(x0 >> 8)
         self.write_data(x0 & 0xFF)
@@ -267,10 +328,16 @@ class ILI9488:
         self.write_data(y1 >> 8)
         self.write_data(y1 & 0xFF)
 
-        self.write_cmd(TFT_RAMWR) # Memory write
+        self.write_cmd(TFT_RAMWR) # Memory write command to prepare for pixel data
 
     def pixel(self, x, y, color):
-        """Draw a pixel"""
+        """Draws a single pixel at the specified coordinates.
+
+        Args:
+            x (int): X-coordinate of the pixel.
+            y (int): Y-coordinate of the pixel.
+            color (tuple): RGB color (r, g, b) of the pixel.
+        """
         self.set_window(x, y, x, y)
         r, g, b = color
         self.write_data(r)
@@ -278,7 +345,14 @@ class ILI9488:
         self.write_data(b)
 
     def hline(self, x, y, w, color):
-        """Draw a horizontal line"""
+        """Draws a horizontal line.
+
+        Args:
+            x (int): Starting X-coordinate.
+            y (int): Y-coordinate.
+            w (int): Width (length) of the line.
+            color (tuple): RGB color (r, g, b) of the line.
+        """
         self.set_window(x, y, x + w - 1, y)
         r, g, b = color
         buf = bytearray(3 * w)
@@ -289,7 +363,14 @@ class ILI9488:
         self.write_data(buf)
 
     def vline(self, x, y, h, color):
-        """Draw a vertical line"""
+        """Draws a vertical line.
+
+        Args:
+            x (int): X-coordinate.
+            y (int): Starting Y-coordinate.
+            h (int): Height (length) of the line.
+            color (tuple): RGB color (r, g, b) of the line.
+        """
         self.set_window(x, y, x, y + h - 1)
         r, g, b = color
         buf = bytearray(3 * h)
@@ -300,14 +381,30 @@ class ILI9488:
         self.write_data(buf)
 
     def rect(self, x, y, w, h, color):
-        """Draw a rectangle"""
+        """Draws an unfilled rectangle.
+
+        Args:
+            x (int): X-coordinate of the top-left corner.
+            y (int): Y-coordinate of the top-left corner.
+            w (int): Width of the rectangle.
+            h (int): Height of the rectangle.
+            color (tuple): RGB color (r, g, b) of the rectangle borders.
+        """
         self.hline(x, y, w, color)
         self.hline(x, y + h - 1, w, color)
         self.vline(x, y, h, color)
         self.vline(x + w - 1, y, h, color)
 
     def line(self, x0, y0, x1, y1, color):
-        """Draw a line using Bresenham's algorithm"""
+        """Draws a line between two points using Bresenham's algorithm.
+
+        Args:
+            x0 (int): Starting X-coordinate.
+            y0 (int): Starting Y-coordinate.
+            x1 (int): Ending X-coordinate.
+            y1 (int): Ending Y-coordinate.
+            color (tuple): RGB color (r, g, b) of the line.
+        """
         dx = abs(x1 - x0)
         dy = abs(y1 - y0)
         sx = 1 if x0 < x1 else -1
@@ -327,14 +424,17 @@ class ILI9488:
                 y0 += sy
     
     def text(self, x, y, text_str, color,  scale=1, background_color=None, spacing=1):
-        """Draw text using the loaded font with optional scaling
+        """Draws text on the display using the currently set font.
+        Supports scaling and optional background color.
         
         Args:
-            x, y (int): Starting coordinates
-            text_str (str): Text to display
-            color (tuple): RGB color (r, g, b)
-            scale (int, optional): Scaling factor (>=1). Defaults to 1.
-            background_color (tuple, optional): Background RGB color. Defaults to None.
+            x (int): Starting X-coordinate for the text.
+            y (int): Starting Y-coordinate for the text.
+            text_str (str): The string of text to display.
+            color (tuple): RGB color (r, g, b) of the text.
+            scale (int, optional): Scaling factor for the font (1 for no scaling). Defaults to 1.
+            background_color (tuple, optional): RGB background color for the text. If None, background is transparent. Defaults to None.
+            spacing (int, optional): Additional pixel spacing between characters. Defaults to 1.
         """
         if not self.font:
             print("Error: Font not loaded. Call set_font() first or pass font to constructor.")
@@ -344,27 +444,27 @@ class ILI9488:
 
         current_x = x
         for char_code in text_str:
+            # Get character bitmap data from the font object
             char_data, char_width, char_height = self.font.get_letter(char_code, color, background_color)
             if char_data:
                 scaled_width = char_width * scale
                 scaled_height = char_height * scale
                 
                 if scale == 1:
-                    # No scaling needed - use original data
+                    # If no scaling, write original character data directly
                     self.set_window(current_x, y, current_x + char_width - 1, y + char_height - 1)
                     self.write_data(char_data)
                 else:
-                    # Create scaled character buffer
+                    # Create a buffer for the scaled character
                     scaled_data = bytearray(3 * scaled_width * scaled_height)
                     src_idx = 0
                     dest_idx = 0
                     
-                    # Scale vertically (repeat each row 'scale' times)
+                    # Scale character pixels
                     for _ in range(char_height):
                         row_buffer = bytearray(3 * scaled_width)
                         row_idx = 0
                         
-                        # Scale horizontally (repeat each pixel 'scale' times)
                         for _ in range(char_width):
                             pixel = char_data[src_idx:src_idx+3]
                             src_idx += 3
@@ -372,29 +472,35 @@ class ILI9488:
                                 row_buffer[row_idx:row_idx+3] = pixel
                                 row_idx += 3
                         
-                        # Repeat scaled row 'scale' times
                         for _ in range(scale):
                             scaled_data[dest_idx:dest_idx+len(row_buffer)] = row_buffer
                             dest_idx += len(row_buffer)
                     
-                    # Draw scaled character
+                    # Draw the scaled character
                     self.set_window(current_x, y, current_x + scaled_width - 1, y + scaled_height - 1)
                     self.write_data(scaled_data)
                 
-                # Move cursor (add spacing pixels space between characters)
+                # Advance cursor position for the next character
                 current_x += scaled_width + spacing
 
     def set_font(self, font_obj):
-        """Set the font for the display"""
+        """Sets the font object to be used for subsequent text drawing operations.
+
+        Args:
+            font_obj (XglcdFont): The font object to set.
+        """
         self.font = font_obj
     
     def image(self, x, y, w, h, data):
-        """Display an RGB666 image at specified coordinates.
+        """Displays an RGB666 image on the display at the specified coordinates.
         
         Args:
-            x, y (int): Top-left corner coordinates
-            w, h (int): width and length of image
-            data (bytes): RGB666 image data (3 bytes per pixel)
+            x (int): X-coordinate of the top-left corner of the image.
+            y (int): Y-coordinate of the top-left corner of the image.
+            w (int): Width of the image in pixels.
+            h (int): Height of the image in pixels.
+            data (bytes): Raw RGB666 image data (3 bytes per pixel) as a bytearray or bytes object.
         """
         self.set_window(x, y, x + w - 1, y + h - 1)
         self.write_data(data)
+

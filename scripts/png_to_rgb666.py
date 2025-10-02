@@ -1,5 +1,5 @@
-from PIL import Image
 import sys, ast
+from PIL import Image
 
 def png_to_rgb666(input_file, output_file=None, background=(255, 255, 255)):
     """Convert PNG to RGB666 with transparent pixels replaced by specified background.

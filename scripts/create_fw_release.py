@@ -1,7 +1,4 @@
-import os
-import shutil
-import subprocess
-import sys
+import sys, os, shutil, subprocess
 
 def create_fw_release(version: str):
     src_dir = "../src"

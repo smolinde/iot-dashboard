@@ -1,8 +1,10 @@
+# Import required libraries and ILI9488 driver
 from machine import Pin, SPI
 from drivers.ILI9488 import ILI9488, RGB
 import time
 
 class DisplayManager:
+    """Manages all display-related operations for the device."""
     __ERROR_SCREEN_TIMEOUT = 20
 
     __STATION_DEFAULT_TEXT_LABELS = [
@@ -23,6 +25,13 @@ class DisplayManager:
     }
 
     def __init__(self, ili_font, price_font):
+        """
+        Initializes the DisplayManager with the given fonts and sets up the SPI display.
+
+        Args:
+            ili_font: The font object for general text display.
+            price_font: The font object specifically for displaying prices.
+        """
         spi = SPI(2, baudrate=60000000, polarity=0, phase=0, sck=Pin(10), mosi=Pin(11), miso=None)
         self.display = ILI9488(spi, Pin(14), Pin(12), Pin(13), 0, ili_font)
         self.currently_displayed = {
@@ -37,16 +46,36 @@ class DisplayManager:
         self.clear_display()    
 
     def __ljust(self, s, width, fillchar = ' '):
+        """
+        Left-justifies a string to a specified width, padding with a fill character.
+
+        Args:
+            s (str): The string to justify.
+            width (int): The total width of the resulting string.
+            fillchar (str, optional): The character to use for padding. Defaults to ' '.
+
+        Returns:
+            str: The left-justified string.
+        """
         return s + (fillchar * (width - len(s)))
     
     def clear_display(self):
+        """Clears the entire display by filling it with white color."""
         self.display.fill_screen(ILI9488.WHITE)
     
     def draw_waiting_screen(self):
+        """Draws a generic 'Please wait...' screen."""
         self.clear_display()
         self.display.text(100, 141, "Please wait...", ILI9488.BLACK, 2, ILI9488.WHITE)
 
     def draw_waiting_for_wlan(self, wlan_icon, wlan_ssid):
+        """
+        Draws a screen indicating that the device is waiting for WLAN connection.
+
+        Args:
+            wlan_icon: The image data for the WLAN icon.
+            wlan_ssid (str): The SSID of the WLAN network being connected to.
+        """
         self.clear_display()
         wlan_ssid = wlan_ssid if len(wlan_ssid) < 21 else wlan_ssid[:18] + "..."
         self.display.image(10, 110, 100, 100, wlan_icon)
@@ -55,10 +84,25 @@ class DisplayManager:
         self.display.text(125, 180, wlan_ssid, ILI9488.BLACK, 1, ILI9488.WHITE)
 
     def draw_wlan_waiting_time(self, time_left):
+        """
+        Draws the remaining time while waiting for WLAN connection.
+
+        Args:
+            time_left (int): The number of seconds remaining.
+        """
         time_left = f"{time_left}" if len(f"{time_left}") > 1 else f" {time_left}"
         self.display.text(426, 180, f"{time_left}s", ILI9488.BLACK, 1, ILI9488.WHITE)
     
     def draw_error(self, error_number, error_text, error_qr_code):
+        """
+        Draws an error screen with an error number, descriptive text, and a QR code.
+        Handles auto-restart countdown for certain error types.
+
+        Args:
+            error_number (str): The error code or number.
+            error_text (list): A list of strings, each representing a line of error description.
+            error_qr_code: The image data for the QR code.
+        """
         self.clear_display()
         self.display.text(10, 10, f"ERROR {error_number}", ILI9488.RED, 2, ILI9488.WHITE)
         self.display.image(370, 10, 100, 100, error_qr_code)
@@ -74,10 +118,25 @@ class DisplayManager:
                 time.sleep(1)
     
     def __draw_error_waiting_time(self, time_left):
+        """
+        Draws the remaining time for an auto-restart on the error screen.
+
+        Args:
+            time_left (int): The number of seconds remaining until restart.
+        """
         time_left = f"{time_left}" if len(f"{time_left}") > 1 else f" {time_left}"
         self.display.text(312, 260, f"{time_left}s", ILI9488.BLACK, 1, ILI9488.WHITE)
 
     def draw_main_layout(self, station_icons, weather_symbols, station_labels, fuel_type):
+        """
+        Draws the main layout of the display, including dividers, weather symbols, and station placeholders.
+
+        Args:
+            station_icons (list): A list of image data for gas station icons.
+            weather_symbols (list): A list of image data for weather symbols.
+            station_labels (list): A list of tuples, each containing station information (e.g., name, fuel type).
+            fuel_type (str): The current fuel type being displayed (e.g., 'e5', 'e10', 'diesel').
+        """
         self.clear_display()
         self.display.fill_rect(398, 0, 2, 80, ILI9488.BLACK)
         for i in range(2):
@@ -107,6 +166,12 @@ class DisplayManager:
                 self.display.text(90, 89 + 80 * i + 22,  station_labels[i][2][:21], ILI9488.BLACK, 1, ILI9488.WHITE)
     
     def draw_weekday_date_time(self, timedate):
+        """
+        Draws the weekday, date, and time on the display, updating only changed elements.
+
+        Args:
+            timedate (list): A list containing [weekday (str), date (str), time (str)].
+        """
         if timedate[0] != self.currently_displayed.get("timedate")[0]:
             self.currently_displayed["timedate"][0] = timedate[0]
             text_length = self.ili_font.measure_text(timedate[0])
@@ -123,6 +188,14 @@ class DisplayManager:
             self.display.text(322, 11, timedate[2], ILI9488.BLACK, 1, ILI9488.WHITE)
     
     def draw_weather_data(self, weather_data, weather_icon_name, weather_icon=None):
+        """
+        Draws weather data and updates the weather icon if it has changed.
+
+        Args:
+            weather_data (list): A list of strings representing various weather metrics.
+            weather_icon_name (str): The name of the current weather icon.
+            weather_icon: The image data for the weather icon (optional, used if name changes).
+        """
         for i in range(len(weather_data)):
             if weather_data[i] != self.currently_displayed.get("weather_data")[i]:
                 self.currently_displayed["weather_data"][i] = weather_data[i]
@@ -133,6 +206,13 @@ class DisplayManager:
             self.display.image(400, 0, 80, 80, weather_icon)
     
     def draw_station_data(self, station_statuses, fuel_prices):
+        """
+        Draws gas station statuses and fuel prices, updating only changed elements.
+
+        Args:
+            station_statuses (list): A list of strings representing the status of each gas station.
+            fuel_prices (list): A list of strings representing the fuel prices for each station.
+        """
         for i in range(len(station_statuses)):
             if station_statuses[i] != self.currently_displayed.get("station_statuses")[i]:
                 self.currently_displayed["station_statuses"][i] = station_statuses[i]
@@ -148,6 +228,14 @@ class DisplayManager:
         self.display.set_font(self.ili_font)
     
     def draw_update_screen(self, update_icon, current_version, update_version):
+        """
+        Draws a screen indicating a system update or rollback is in progress.
+
+        Args:
+            update_icon: The image data for the update icon.
+            current_version (str): The current version of the system.
+            update_version (str): The target version for the update or rollback.
+        """
         self.clear_display()
         self.display.image(10, 110, 100, 100, update_icon)
         self.display.text(125, 120, "Updating System", ILI9488.BLACK, 2, ILI9488.WHITE)
@@ -162,4 +250,11 @@ class DisplayManager:
             self.display.text(125, 160, f"Rollback {current_version} to {update_version}", ILI9488.BLACK, 1, ILI9488.WHITE)
 
     def draw_update_action(self, update_action):
+        """
+        Draws the current update action being performed on the update screen.
+
+        Args:
+            update_action (str): A description of the current update step.
+        """
         self.display.text(125, 180, self.__ljust(update_action, 22), ILI9488.BLACK, 1, ILI9488.WHITE)
+
