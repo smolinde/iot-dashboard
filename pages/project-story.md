@@ -7,19 +7,22 @@ As a car owner and someone who is often going somewhere, I permanently used to b
 To make a nice looking dashboard with no wires sticking out, I decided to simply glue the ESP32-C3 to the back of the display. I desoldered the GPIO pins and simply soldered everything together with regular wires. I also wanted to have a nice case with a transparent back. You can find more about the case on the [hardware setup](./hardware-setup.md) page. The initial version looked like this:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_1.png">First Version of Dashboard</img>
+<img src="../visuals/images/hardware_version_1.png" width=500></img><br>
+First Version of Dashboard
 </p>
 
 Later, I realized that the small ceramic WLAN antenna is not really good, so I decided to overhaul and replace the ESP32-C3 with an advanced version with an IPEX antenna interface. The antenna itself is glued to the transparent back of the dashboard. Also, I improved the wiring by using thin copper bell wire which holds shape and just looks better than the mess before:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_2.png">Second Version of Dashboard</img>
+<img src="../visuals/images/hardware_version_2.png" width=500></img><br>
+Second Version of Dashboard
 </p>
 
 Now, this looks much better and also, the WLAN works fantastically. But then, another upgrade was necessary (more on this later in [2.4]()), and I had to replace the ESP32-C3 Plus with an ESP32-S3 Nano. The final version, as of today, looks like this:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_3.png">Final Version of Dashboard</img>
+<img src="../visuals/images/hardware_version_3.png" width=500></img><br>
+Final Version of Dashboard
 </p>
 
 As you can see, the design itself did not change at all, but the microcontroller and wiring did. The approach to use screws and nuts turned out to be a great choice because this way it was possible to do adjustments without breaking anything.
@@ -35,8 +38,8 @@ Where there is software, there are bugs. As a user, I would definetely like to h
 ## 3 AI-Supported Development
 Throughout the project, I used three AI tools - [ChatGPT](https://chatgpt.com/), [DeepSeek](https://chat.deepseek.com/), and [Manus AI](https://manus.im/app). Each of these tools has its own strengths and weaknesses, but in combination, they are basically omnipotent. Although they can write amazing texts and create good code, I wrote all of these texts manually and optimized code by hand. Never in my 25 years of life I would be able to create such a project (while finishing my master degree and then start working a full-time job) without the help of AI tools and large language models in this short amount of time. I think through AI I not only gained the missing pieces of code, but also a ton of specific knowledge related to this project. I had an amazing experience and want to encourage all developers to use AI for their projects, but always reflect critically on the artifacts created by AI. A software developer without AI is smart but slow, AI without a developer is fast but stupid. Combined together, they become a very powerful alloy. 
 ## 4 New Business Model
-Just for the sake of fun, I decided to invent a new business model for this project and how it would generate renevue if implemented in real life. I think that the idea of corporate secrets in our modern world is heavily outdated and should be replaced by something new that aligns with nowadays common sense. More on that you can read on the [business model page](./business-model.md).
+Just for the sake of fun, I decided to invent a new business model for this project and how it would generate renevue if implemented in real life. I think that the idea of corporate secrets in our modern world is heavily outdated and should be replaced by something new that aligns with nowadays common sense. More on that you can read on the [Business Model](./business-model.md) page.
 ## 5 Results
 To summarize everything, I am quite happy with the output of this project. The dashboard hangs right next to my front door and I already got used to it. Every time I leave the house or come back home, this little device not only tells me the current time, weather, and gas prices, but also reminds me of the countless coding nights I have spent to create this little helper. I hope that one day, someone actually decides to build this thing and will use it like I do. And maybe even get an automatic firmware update, or request a station icon.
 
-<p align="center"><a href="#">Unscroll this page</a></p>
+<p align="center"><a href="#project-story">Unscroll this page</a></p>

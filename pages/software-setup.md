@@ -66,4 +66,4 @@ Then run the following command to copy everything to the dashboard:
 
 This command copies everything in the current directory recursively to the root directory of the ESP32-S3 Nano. This can take some time to complete. After that, your dashboard is ready for exploitation. Disconnect the dashboard from yor computer and connect it to any 5V power supply. You will most likely see the [Error 1101](../errors/1101.md) as there is no SD card inserted yet. Please get familiar with the possibilities and customization options from the [User Manual](./user-manual.md).
 
-<p align="center"><a href="#">Unscroll this page</a></p>
+<p align="center"><a href="#software-setup">Unscroll this page</a></p>
