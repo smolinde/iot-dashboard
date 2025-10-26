@@ -52,8 +52,6 @@ class TimeManager:
             self.timezone = data["timezone"]
             self.timezone_set = True
         except Exception:
-            self.tz_offset = 0
-            self.timezone = "Etc/UTC"
             self.timezone_set = False
     
     def get_tz_identifier(self):

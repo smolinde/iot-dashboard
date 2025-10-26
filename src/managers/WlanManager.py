@@ -35,10 +35,7 @@ class WlanManager:
         Returns:
             bool: True if connected, False otherwise.
         """
-        if self.wlan.isconnected():
-            return True
-        else:
-            return False
+        return self.wlan.isconnected()
 
     def is_connected(self):
         """

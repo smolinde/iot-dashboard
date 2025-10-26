@@ -147,11 +147,13 @@ def main():
             previous_day = t[T_DAY]
             perform_update_check = True
 
-        # Hourly tasks, sync NTP clock
+        # Hourly tasks, sync NTP clock, set timezone (relevant for summer/winter time switching)
         if previous_hour != t[T_HOUR]:
             previous_hour = t[T_HOUR]
+            exit_if_process_fails(*wlnm.is_connected(), dspm, fmgr, wlnm)
             exit_if_process_fails(*wlnm.device_online(), dspm, fmgr, wlnm)
             exit_if_process_fails(*tmgr.sync_time(), dspm, fmgr, wlnm)
+            tmgr.set_timezone()
 
         # Minute-by-minute tasks, update time and date on display
         if previous_minute != t[T_MINUTE]:
@@ -168,14 +170,16 @@ def main():
         #          the station appears to be open. When fetching at 23:01, it will appear as closed.
         if (data_can_be_updated and t[T_SECOND] >= 1 and (t[T_MINUTE] - 1) % 5 == 0):
             data_can_be_updated = False
+            exit_if_process_fails(*wlnm.is_connected(), dspm, fmgr, wlnm)
             exit_if_process_fails(*wlnm.device_online(), dspm, fmgr, wlnm)
             if not tmgr.get_timezone_set():
                 tmgr.set_timezone()
 
-            # Check for firmware updates if enabled and at the specified hour
+            # Check for firmware updates if enabled and at the specified hour and perform a timezone update.
+            # The timezone update ensures
             if (fmgr.get_configuration_value("automatic_updates") and perform_update_check and t[T_HOUR] == UPDATE_HOUR):
-                perform_update_check = False
                 update_firmware(dspm, upmr, fmgr, wlnm)
+                perform_update_check = False
             
             # Fetch and display weather data
             weather_data, weather_icon_name = wmgr.get_weather_data(t, tmgr.get_tz_identifier())
