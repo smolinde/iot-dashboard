@@ -2,11 +2,8 @@
 A compact and customizable dashboard for displaying weather and gas prices in Germany. Made with love, passion, and a little bit of magic 🪄
 
 ## Presentation
-<p align="center">
-<video width="500" controls>
-  <source src="./visuals/videos/presentation_video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video><br>A short product presentation video</p>
+
+<p align="center">A short product presentation video</p>
 
 ## Pages
 
