@@ -7,6 +7,13 @@ A compact and customizable dashboard for displaying weather and gas prices in Ge
 
 <p align="center">A short product presentation video</p>
 
+<video width="500" controls poster="./visuals/thumbnail.jpg">
+  <source src="./visuals/videos/presentation_video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<p>A short product presentation video.</p>
+
+
 ## Pages
 
 <ul style="list-style: '▶  '"><li><a href="./pages/project-story.md">Project Story</a></li>
