@@ -6,14 +6,14 @@ A compact and customizable dashboard for displaying weather and gas prices in Ge
 [A short product presentation video](https://github.com/user-attachments/assets/f38d3d40-2859-4da9-9e7c-9e06c5ae1cb3)
 
 ## Pages
-&nbsp;&nbsp;▶ &nbsp;[Project Story](./pages/project-story.md)  
-&nbsp;&nbsp;▶ &nbsp;[User Manual](./pages/user-manual.md)  
-&nbsp;&nbsp;▶ &nbsp;[Error Pages](./errors)  
-&nbsp;&nbsp;▶ &nbsp;[Hardware Setup](./pages/hardware-setup.md)  
-&nbsp;&nbsp;▶ &nbsp;[Software Setup](./pages/software-setup.md)  
-&nbsp;&nbsp;▶ &nbsp;[Business Model](./pages/business-model.md)  
-&nbsp;&nbsp;▶ &nbsp;[GDPR Considerations](./pages/gdpr-considerations.md)  
-&nbsp;&nbsp;▶ &nbsp;[Presentation Video Sources](./pages/video-sources.md)
+&nbsp;&nbsp;→ &nbsp;[Project Story](./pages/project-story.md)  
+&nbsp;&nbsp;→ &nbsp;[User Manual](./pages/user-manual.md)  
+&nbsp;&nbsp;→ &nbsp;[Error Pages](./errors)  
+&nbsp;&nbsp;→ &nbsp;[Hardware Setup](./pages/hardware-setup.md)  
+&nbsp;&nbsp;→ &nbsp;[Software Setup](./pages/software-setup.md)  
+&nbsp;&nbsp;→ &nbsp;[Business Model](./pages/business-model.md)  
+&nbsp;&nbsp;→ &nbsp;[GDPR Considerations](./pages/gdpr-considerations.md)  
+&nbsp;&nbsp;→ &nbsp;[Presentation Video Sources](./pages/video-sources.md)
 
 ## Acknowledgements
 The author would like to express sincerest gratitude to:  
