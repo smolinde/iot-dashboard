@@ -76,13 +76,13 @@ First task is to be done careful. You have to remove the yellow GPIO pins attach
 </p>
 <br>
 <p align="center">
-<img src="../visuals/images/wiring.png" width=500></img><br>
+<img src="../images/wiring.png" width=500></img><br>
 Wiring Diagram (Fritzing)
 </p>
 <br>
 <a name="dashboardBackSide"></a>
   <p align="center">
-    <img src="../visuals/images/dashboard_back.png" width=500></img><br>
+    <img src="../images/dashboard_back.png" width=500></img><br>
     Example of a Dashboard
   </p>
 After you have finished this part, you can now tear off the protection foil on the screen itself. The next steps will be physically more demanding, so I suggest to take a break at this point.
@@ -91,7 +91,7 @@ After you have finished this part, you can now tear off the protection foil on t
 To make an accurate frame, you either have to use a 3D-printer or cut and carve out holes. I honestly don't like the uneven structure of 3D-printed parts, and therefore prefer to cut and carve. For the screen frame, take a piece of paper, draw a rectangle (56mm x 85.5mm), and cut it out. Glue the piece of paper to the inner side of the box part that has four legs and no see-through holes. Make sure to glue the paper perfectly centered. After that, take a thin water-resistant pen and mark the corner edges of the piece of paper. Take something small and straigt that fits inside the box, and connect the four edges with the water-resistant pen. Now you have a frame that needs to be cut out. The best was to do so is to take a drill bit for butting holes with a diameter of about 15mm so that a 10mm metal saw blade can fit in. Drill four holes close to the corners of the drawn frame, but pay attention to not drill beyond the line! Next, insert the saw blade and carefully saw from one hole to the next, as close as possible to the line. Leave 1mm clearance distance while cutting. After four cuts, you are left with an almost rectangled window. Now take a rough large file and file down the plastic until you hit the drawn frame border. Do so on all four sides and ensure you create accurate and sharp corners. Then, wash the dust away with water. Try to fit in the display. It will probably not fir at first try, so you have to incrementally increase the window size, but be careful to not take away too much material so that there are no imperfect gaps later between the display and the frame. After you have made a good window, place the screen inside, take a 3mm drill bit, and use the four fixation holes of the screen to mark the drill spots on the plastic of the dashboard frame. Then, after creating proper marks, drill four holes. Wash the plastic frame again with water. Take four M3 screws (8-10mm length), insert them from the front side into the drilled holes, and screw on four M3 nuts. Don't tighten the nuts up too much! Now, carefully place the display onto the four screws. Push the display through the window and check if the display aligns with the plastic on the front side. After this, take another four nuts and screw them on tightly to the ends of the screws. Use pliers to hold the nut in place and tighten carefully with a hex wrench from the front side by screwing in the screws. Don't apply too much force as you will unscrew everything soon anyway! We are still missing two holes, one for the SD card, and one for the USB-C wire. The SD card slot hole is 2mm x 25mm and the USB-C hole depends on the cable you are going to use. The one that I have listed has comfortable dimensions of 5mm x 10mm. The exact position where to drill holes is very individual. The holes will be not really visible, so if they are going to be not perfect, it is not a big deal. Here is an example of how it could look like:
 
 <p align="center">
-<img src="../visuals/images/dashboard_side.png" width=500></img><br>
+<img src="../images/dashboard_side.png" width=500></img><br>
 Dashboard Side View
 </p>
 
@@ -101,14 +101,14 @@ Unscrew the display, remove the screws and nuts. Cut out the remaning two holes.
 I think that a transparen back is the optimal choice because it reveals the beauty of microelectronics when taken off the wall. I recommend using acrylic glass with a 2mm thickness. You will need a rectangle with the size 74mm x 119mm. To cut out a precise piece, sketch the rectangle on the protective foil of the acrylic glass and create two scratch lines; One will definetely have to run from one edge to the other of the whole acrylic piece, and the other just meet the first one. To better understand the idea, here is a simple illustration:
 
 <p align="center">
-<img src="../visuals/images/acrylic_glass.png" width=500></img><br>
+<img src="../images/acrylic_glass.png" width=500></img><br>
 Acrylic Glass Cutting Scheme
 </p>
 
 Make sure the carved lines are decent. Now you have to apply a little bit of physical strength. Place the whole piece on a hard surface, and but a book or any other large object on to of the acrylic glass. Make sure that edge <b>A</b> is a few millimeters away from the hard surface edge. Press down with one hand on the book. Grab the overhanding piece firmly with your other hand, and break the overhanging piece with rapid force down. A loud crack, and you have a perfect piece. Repeat the process with edge <b>B</b>. If some sharp corners are still sticking out, clip them away with pliers, but be careful when doing so. With a rough file, smooth out the sharp edges. Now you have to make a total of eight holes. Four aligned with the legs of the display frame, two for the microcontroller button access, and two for wall screws. To make the four holes perfectly aligning with the legs of the display frame, use the other box half. Place the acrylic glass piece onto the legs of the counterpiece, and make initial drill marks by hand with a 3mm drill bit. Now you can carefully drill the four holes. After this, place the piece onto the dashboard back and check visually if the holes align. If the don't align perfect, use an electric drill with a 3mm drill bit to expand misaligned holes by the necessary amount. After that, mark two points and drill 7mm holes, as shown in the diagram below:
 
 <p align="center">
-<img src="../visuals/images/acrylic_glass_holes.png" width=500></img><br>
+<img src="../images/acrylic_glass_holes.png" width=500></img><br>
 Acrylic Glass Holes Scheme
 </p>
 

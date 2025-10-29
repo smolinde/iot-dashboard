@@ -7,21 +7,21 @@ As a car owner and someone who is often going somewhere, I permanently used to b
 To make a nice looking dashboard with no wires sticking out, I decided to simply glue the ESP32-C3 to the back of the display. I desoldered the GPIO pins and simply soldered everything together with regular wires. I also wanted to have a nice case with a transparent back. You can find more about the case on the [hardware setup](./hardware-setup.md) page. The initial version looked like this:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_1.png" width=500></img><br>
+<img src="../images/hardware_version_1.png" width=500></img><br>
 First Version of Dashboard
 </p>
 
 Later, I realized that the small ceramic WLAN antenna is not really good, so I decided to overhaul and replace the ESP32-C3 with an advanced version with an IPEX antenna interface. The antenna itself is glued to the transparent back of the dashboard. Also, I improved the wiring by using thin copper bell wire which holds shape and just looks better than the mess before:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_2.png" width=500></img><br>
+<img src="../images/hardware_version_2.png" width=500></img><br>
 Second Version of Dashboard
 </p>
 
 Now, this looks much better and also, the WLAN works fantastically. But then, another upgrade was necessary (more on this later in [2.4]()), and I had to replace the ESP32-C3 Plus with an ESP32-S3 Nano. The final version, as of today, looks like this:
 
 <p align="center">
-<img src="../visuals/images/hardware_version_3.png" width=500></img><br>
+<img src="../images/hardware_version_3.png" width=500></img><br>
 Final Version of Dashboard
 </p>
 

@@ -36,7 +36,7 @@ Please keep the device and its components away from children and animals - for t
 ### 2.1 SD Card Setup
 All configurations are stored on the SD card. <i>If you have received an SD card together with the product, please skip to [2.2](#22-tankerkoenig-api-key).</i> To set up the SD card, plug it into your computer (with the adapter) and format it to FAT32 filesystem format. The following animation demonstrates how to format the SD card on a Windows 11 machine:
 <p align="center">
-<img src="../visuals/images/correct_sd_card_formatting_win11.png" width=300></img><br>Correct SD card formatting option
+<img src="../images/correct_sd_card_formatting_win11.png" width=300></img><br>Correct SD card formatting option
 </p>
 
  After this, simply copy all contents from [this folder](../sdcard/) to the root directory of your SD card.
