@@ -1,11 +1,12 @@
 # IoT-Dashboard
 A compact and customizable dashboard for displaying weather and gas prices in Germany. Made with love, passion, and a little bit of magic 🪄
 
-## Presentation
+## Presentation Video
 
 [A short product presentation video](https://github.com/user-attachments/assets/f38d3d40-2859-4da9-9e7c-9e06c5ae1cb3)
+<p align="center"><i>For a better experience, turn on the sound</i></p>
 
-## Pages
+## Project Pages
 &nbsp;&nbsp;→ &nbsp;[Project Story](./pages/project-story.md)  
 &nbsp;&nbsp;→ &nbsp;[User Manual](./pages/user-manual.md)  
 &nbsp;&nbsp;→ &nbsp;[Error Pages](./errors)  
