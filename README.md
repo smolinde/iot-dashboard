@@ -3,16 +3,9 @@ A compact and customizable dashboard for displaying weather and gas prices in Ge
 
 ## Presentation
 
-[A short product presentation video](https://github.com/user-attachments/assets/85fad391-dac8-4491-8299-4a75610a5c8f)
+[A short product presentation video](https://github.com/user-attachments/assets/f38d3d40-2859-4da9-9e7c-9e06c5ae1cb3)
 
-<p align="center">A short product presentation video</p>
-
-<video width="500" controls poster="./visuals/thumbnail.jpg">
-  <source src="./visuals/videos/presentation_video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-<p>A short product presentation video.</p>
-
+<p align="center"><i>A short product presentation video</i></p>
 
 ## Pages
 
