@@ -333,7 +333,7 @@ class FileManager:
             fallback = "/symbols/unknown-station.rgb666"
         elif image_category == "weather":
             folder = "/weather_icons"
-            fallback = None
+            fallback = "/weather_icons/unknown-weather.rgb666"
         elif image_category == "error":
             folder = "/errors"
             fallback = None

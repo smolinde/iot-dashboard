@@ -118,10 +118,10 @@ class WeatherManager:
         """
         try:
             data = data["weather"]["icon"]
-            return str(data) if data is not None else "unknown"
+            return str(data) if data is not None else "unknown-weather"
 
         except Exception:
-            return "unknown"
+            return "unknown-weather"
 
     def get_weather_data(self, timestamp, timezone):
         """
@@ -145,7 +145,7 @@ class WeatherManager:
             weather_icon_name = self.__get_weather_icon(data)
         except Exception:
             current_temperature = "----"
-            weather_icon_name = "unknown"
+            weather_icon_name = "unknown-weather"
 
         try:
             response = requests.get(f"{self.base_url_weather}&date={date}&tz={timezone}")
