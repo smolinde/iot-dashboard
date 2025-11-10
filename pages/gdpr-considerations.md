@@ -2,8 +2,8 @@
 ← [Homepage](../)
 
 ## 1 General Information
-This project does not aim to collect, process, or store personal data.  
-Any personal data that might be transmitted occurs only when communicating with external API's. Depending on configuration, the following information will be sent:
+This project does not aim to collect, process, or store personal data.
+Any personal data that might be transmitted occurs only when communicating with external APIs. Depending on configuration, the following information will be sent:
 
 - Public IP address (IPv4) of the user's internet connection (WAN address)
 - User location (latitude and longitude), if configured
@@ -23,6 +23,6 @@ The [BrightSky API](https://brightsky.dev/) uses data provided by [DWD](https://
 The GDPR risk level for this project is considered <b>low</b>, as it does not process or store any personal data directly.
 
 ## 4 Legal Disclaimer
-This project is a non-commercial, open-source project provided without warranty. The repository maintainer is not responsible for the data processing practices of third-party API's. Users are advised to review the linked GDPR declarations for detailed information on how these services handle personal data.
+This project is a non-commercial, open-source project provided without warranty. The repository maintainer is not responsible for the data processing practices of third-party APIs. Users are advised to review the linked GDPR declarations for detailed information on how these services handle personal data.
 
 <p align="center"><a href="#gdpr-considerations">Unscroll this page</a></p>
