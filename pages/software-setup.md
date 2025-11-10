@@ -2,7 +2,7 @@
 ← [Homepage](../)
 
 ## 1 Required Software Tools
-To be able to flash the software to the dashboard, you have to install [Python](https://www.python.org/downloads/) and [Git](https://git-scm.com/) on your machine. For this instruction, I will use [Mircosoft PowerShell](https://learn.microsoft.com/en-us/powershell/). This is an amazing command line interface (CLI) that I use a lot. On Mac/Linux, you can use the built-in terminal.
+To be able to flash the software to the dashboard, you must install [Python](https://www.python.org/downloads/) and [Git](https://git-scm.com/) on your machine. For this instruction, I will use [Microsoft PowerShell](https://learn.microsoft.com/en-us/powershell/). This is an amazing command line interface (CLI) that I use a lot. On Mac/Linux, you can use the built-in terminal.
 
 ## 2 Software Preparation
 Open a new PowerShell or terminal window. Navigate to the folder where you want to have this repository stored. Copy the corresponding path from your file explorer and run this command:
@@ -48,15 +48,15 @@ You should see something like this:
 Remember the port that your computer uses to communicate with the dashboard. In my case, it is `COM8`. Press <kbd>CTRL</kbd> + <kbd>X</kbd> to quit the MicroPython shell of the ESP32-S3 Nano.
 
 ## 4 Installation of Dashboard Software
-The last component that is still missing is the dashboard software, or more precise, firmware. This requires a few commands only, and is usually a very brief procedure. After a fresh MicroPython installation, there is a file called `boot.py` in the root directory of the microcontroller. This file is obsolete and can be removed with the following command:
+The last component that is still missing is the dashboard software, or more precisely, firmware. This requires only a few commands and is usually a very brief procedure. After a fresh MicroPython installation, there is a file called `boot.py` in the root directory of the microcontroller. This file is obsolete and can be removed with the following command:
 
         mpremote connect COM8 fs rm boot.py
 
-Now we also have to install three additional MicroPython libraries that will be used by the software. The following command requires your computer to have a working internet connection:
+Now we also must install three additional MicroPython libraries that will be used by the software. The following command requires your computer to have a working internet connection:
 
         mpremote connect COM8 mip install tarfile gzip shutil
 
-These libraries will be used for automatic firmware updates in the [updater.py](../src/updater.py) script. Now everythin that is left is to copy all contents from the `src` directory of the repository. Navigate with the following command to the folder:
+These libraries will be used for automatic firmware updates in the [updater.py](../src/updater.py) script. Now everything that is left is to copy all contents from the `src` directory of the repository. Navigate with the following command to the folder:
 
         cd "path/to/your/folder/iot-dashboard/src"
 
@@ -64,6 +64,6 @@ Then run the following command to copy everything to the dashboard:
 
         mpremote connect COM8 fs cp -r . :
 
-This command copies everything in the current directory recursively to the root directory of the ESP32-S3 Nano. This can take some time to complete. After that, your dashboard is ready for exploitation. Disconnect the dashboard from yor computer and connect it to any 5V power supply. You will most likely see the [Error 1101](../errors/1101.md) as there is no SD card inserted yet. Please get familiar with the possibilities and customization options from the [User Manual](./user-manual.md).
+This command copies everything in the current directory recursively to the root directory of the ESP32-S3 Nano. This can take some time to complete. After that, your dashboard is ready for exploitation. Disconnect the dashboard from your computer and connect it to any 5V power supply. You will see the [Error 1101](../errors/1101.md) as there is no SD card inserted yet. Please get familiar with the possibilities and customization options from the [User Manual](./user-manual.md).
 
 <p align="center"><a href="#software-setup">Unscroll this page</a></p>
