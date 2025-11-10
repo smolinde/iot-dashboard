@@ -40,10 +40,11 @@ Main skills that are mandatory for this project to be implemented are:
 ### 3.1 Attach and Connect the ESP32-S3 Nano to the Display
 First task is to be done carefully. You must remove the yellow GPIO pins attached to the display. To do so, first, lift the yellow plastic of the GPIO pins with a knife and pull it slowly away with pliers. Afterwards, desolder each of the 14 pins individually. On the front side, heat the dots with your soldering iron while the display is fixed in place, and pull out the pins with pliers slowly. Do not use force, you might damage the PCB connectors! After this, take a generous amount of flux and solder fresh soldering iron into the connectors, so that all 14 display pins and 4 SD card pins have nice shiny dots, like ball pen tips. Clean everything up with isopropyl alcohol. Clean the mating surface of your ESP32-S3 Nano, attach the double-sided tape strip, and simply glue the microcontroller onto the back side of the display, with the USB-C port facing the same direction as the SD card slot of the display. Place the microcontroller between the XPT2046 touch controller chip and SD card slot. In the following, you must connect the corresponding pins to the microcontroller. This is a very time-consuming step; make sure you have enough fresh air in your room and a glass of water. For your convenience, you can find three different connection schemes, a table, a wiring diagram, and a photo of a dashboard that I have made:
 
-<p align="center">
-<table>
+<table align="center">
   <caption>
+    <p align="center">
     Connection Assignment Table
+    </p>
   </caption>
   <thead>
     <tr>
@@ -73,7 +74,6 @@ First task is to be done carefully. You must remove the yellow GPIO pins attache
     <tr><td>SD Card SPI Clock</td><td>SD_SCK</td><td>GPIO 21</td></tr>
   </tbody>
 </table>
-</p>
 <br>
 <p align="center">
 <img src="../images/wiring.png" width=500></img><br>
